@@ -1,0 +1,26 @@
+{
+  "name": "parking",
+  "module": "index.ts",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "packageManager": "bun@1.3.11",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
+    "db:generate": "bun --filter \"@repo/database\" generate",
+    "db:push": "bun --filter \"@repo/database\" push",
+    "tree": "powershell -NoProfile -File ./scripts/tree.ps1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "turbo": "^2.9.14",
+    "typescript": "^5.4.5"
+  }
+}
