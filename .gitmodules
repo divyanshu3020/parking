@@ -4,3 +4,6 @@
 [submodule "services/fintech-service"]
 	path = services/fintech-service
 	url = https://github.com/divyanshu3020/Fintech-service.git
+[submodule "services/parking-service"]
+	path = services/parking-service
+	url = https://github.com/divyanshu3020/Parking-service.git
