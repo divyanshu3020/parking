@@ -1,3 +1,6 @@
 [submodule "services/identity-service"]
 	path = services/identity-service
 	url = https://github.com/divyanshu3020/identity-service.git
+[submodule "services/fintech-service"]
+	path = services/fintech-service
+	url = https://github.com/divyanshu3020/Fintech-service.git
