@@ -1,0 +1,84 @@
+name: Centralized Docker Build
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      identity: ${{ steps.filter.outputs.identity }}
+      fintech: ${{ steps.filter.outputs.fintech }}
+      parking: ${{ steps.filter.outputs.parking }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            identity:
+              - 'services/identity-service/**'
+            fintech:
+              - 'services/fintech-service/**'
+            parking:
+              - 'services/parking-service/**'
+
+  build-identity:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.identity == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_TOKEN }}
+      - name: Build and push Identity Service
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/identity-service:latest -f services/identity-service/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/identity-service:latest
+
+  build-fintech:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.fintech == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_TOKEN }}
+      - name: Build and push Fintech Service
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/fintech-service:latest -f services/fintech-service/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/fintech-service:latest
+
+  build-parking:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.parking == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_TOKEN }}
+      - name: Build and push Parking Service
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/parking-service:latest -f services/parking-service/Dockerfile .
+          docker push ghcr.io/${{ github.repository_owner }}/parking-service:latest
