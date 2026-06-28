@@ -20,10 +20,13 @@ jobs:
         with:
           filters: |
             identity:
+              - 'services/identity-service'
               - 'services/identity-service/**'
             fintech:
+              - 'services/fintech-service'
               - 'services/fintech-service/**'
             parking:
+              - 'services/parking-service'
               - 'services/parking-service/**'
 
   build-identity:
